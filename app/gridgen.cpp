@@ -1,7 +1,3 @@
-//#define Check_Flip_Tets
-//#include <mtet/mtet.h>
-//#include <mtet/io.h>
-//#include <ankerl/unordered_dense.h>
 #include <span>
 #include <queue>
 #include <optional>
@@ -13,8 +9,6 @@
 #include "grid_mesh.h"
 #include "grid_refine.h"
 
-
-//using namespace mtet;
 
 int main(int argc, const char *argv[])
 {
@@ -32,7 +26,6 @@ int main(int argc, const char *argv[])
         bool dfs = false;
         bool curve_network = false;
         bool discretize_later = false;
-        //bool analysis_mode = false;
     } args;
     CLI::App app{"Longest Edge Bisection Refinement"};
     app.add_option("grid", args.grid_file, "Initial grid file")->required();
