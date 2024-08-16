@@ -1,6 +1,5 @@
 #include <CLI/CLI.hpp>
-#include <optional>
-#include <queue>
+#include <limits>
 #include <span>
 
 #include "csg.h"
@@ -18,7 +17,7 @@ int main(int argc, const char* argv[])
         std::string function_file;
         double threshold;
         double alpha = std::numeric_limits<double>::infinity();
-        int max_elements = -1;
+        int max_elements = std::numeric_limits<int>::max();
         double smallest_edge_length = 0;
         std::string method = "IA";
         std::string csg_file;
@@ -50,10 +49,6 @@ int main(int argc, const char* argv[])
         grid = mtet::load_mesh(args.grid_file);
     }
 
-    int max_elements = args.max_elements;
-    if (max_elements < 0) {
-        max_elements = std::numeric_limits<int>::max();
-    }
     std::string function_file = args.function_file;
     double threshold = args.threshold;
     int mode;
@@ -121,7 +116,7 @@ int main(int argc, const char* argv[])
             args.curve_network,
             args.threshold,
             args.alpha,
-            max_elements,
+            args.max_elements,
             funcNum,
             implicit_func,
             csg_func,
