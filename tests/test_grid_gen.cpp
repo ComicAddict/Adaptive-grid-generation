@@ -76,7 +76,7 @@ TEST_CASE("grid generation of CSG on known examples", "[CSG][examples]") {
     SECTION("20 tori") {
         //parse configurations
         threshold = 0.03;
-        grid = load_tet_mesh(std::string(TEST_FILE) + "/Figure21/grid_1.json");
+        grid = AdaptiveGrid::load_tet_mesh(std::string(TEST_FILE) + "/Figure21/grid_1.json");
         mtet::save_mesh("init.msh", grid);
         grid = mtet::load_mesh("init.msh");
         std::string function_file = std::string(TEST_FILE) + "/Figure21/csg_examples_3.json";

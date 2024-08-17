@@ -3,11 +3,87 @@
 #include <span>
 
 #include <AdaptiveGrid/grid.h>
+#include <AdaptiveGrid/io.h>
 
 #include "csg.h"
 #include "grid_refine.h"
-#include "io.h"
 #include "timer.h"
+
+
+bool save_timings(
+    const std::string& filename,
+    const std::array<std::string, timer_amount>& time_label,
+    const std::array<double, timer_amount>& timings)
+{
+    using json = nlohmann::json;
+    std::ofstream fout(filename.c_str(), std::ios::app);
+    // fout.open(filename.c_str(),std::ios::app);
+    json jOut;
+    for (size_t i = 0; i < timings.size(); ++i) {
+        jOut[time_label[i]] = timings[i];
+    }
+    //
+    fout << jOut << std::endl;
+    fout.close();
+    return true;
+}
+
+
+bool save_function_json(
+    const std::string& filename,
+    const mtet::MTetMesh mesh,
+    ankerl::unordered_dense::map<uint64_t, llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20>>
+        vertex_func_grad_map,
+    const size_t funcNum)
+{
+    using namespace mtet;
+    std::vector<std::vector<double>> values(funcNum);
+    for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
+        values[funcIter].reserve(((int)mesh.get_num_vertices()));
+    }
+    mesh.seq_foreach_vertex([&](VertexId vid, std::span<const Scalar, 3> data) {
+        llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20> func_gradList(funcNum);
+        func_gradList = vertex_func_grad_map[value_of(vid)];
+        for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
+            values[funcIter].push_back(func_gradList[funcIter][0]);
+        }
+    });
+    if (std::filesystem::exists(filename.c_str())) {
+        std::filesystem::remove(filename.c_str());
+    }
+    using json = nlohmann::json;
+    std::ofstream fout(filename.c_str(), std::ios::app);
+    json jOut;
+    for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
+        json jFunc;
+        jFunc["type"] = "customized";
+        jFunc["value"] = values[funcIter];
+        jOut.push_back(jFunc);
+    }
+    fout << jOut.dump(4, ' ', true, json::error_handler_t::replace) << std::endl;
+    fout.close();
+    return true;
+}
+
+
+bool save_metrics(
+    const std::string& filename,
+    const std::array<std::string, 6>& tet_metric_labels,
+    const tet_metric metric_list)
+{
+    using json = nlohmann::json;
+    std::ofstream fout(filename.c_str(), std::ios::app);
+    json jOut;
+    jOut[tet_metric_labels[0]] = metric_list.total_tet;
+    jOut[tet_metric_labels[1]] = metric_list.active_tet;
+    jOut[tet_metric_labels[2]] = metric_list.min_radius_ratio;
+    jOut[tet_metric_labels[3]] = metric_list.active_radius_ratio;
+    jOut[tet_metric_labels[4]] = metric_list.two_func_check;
+    jOut[tet_metric_labels[5]] = metric_list.three_func_check;
+    fout << jOut << std::endl;
+    fout.close();
+    return true;
+}
 
 
 int main(int argc, const char* argv[])
@@ -45,7 +121,7 @@ int main(int argc, const char* argv[])
     // Read initial grid
     mtet::MTetMesh grid;
     if (args.grid_file.find(".json") != std::string::npos) {
-        grid = load_tet_mesh(args.grid_file);
+        grid = AdaptiveGrid::load_tet_mesh(args.grid_file);
     } else {
         grid = mtet::load_mesh(args.grid_file);
     }
@@ -139,7 +215,7 @@ int main(int argc, const char* argv[])
 
     if (args.discretize_later) {
         /// save the grid output for discretization tool
-        save_mesh_json("grid.json", grid);
+        AdaptiveGrid::save_tet_mesh("grid.json", grid);
         /// save the grid output for isosurfacing tool
         save_function_json("function_value.json", grid, metric_list.vertex_func_grad_map, funcNum);
         /// write grid and active tets

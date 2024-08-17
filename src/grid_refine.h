@@ -10,8 +10,9 @@
 #include <SmallVector.h>
 #include <implicit_functions.h>
 
+#include <AdaptiveGrid/io.h>
+
 #include "adaptive_grid_gen.h"
-#include "io.h"
 #include "refine_crit.h"
 #include "tet_quality.h"
 
