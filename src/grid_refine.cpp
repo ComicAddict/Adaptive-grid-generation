@@ -37,7 +37,7 @@ struct TetEqual
 };
 
 
-bool gridRefine(
+bool AdaptiveGrid::gridRefine(
     const int mode,
     const bool curve_network,
     const double threshold,

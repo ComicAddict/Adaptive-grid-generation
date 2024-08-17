@@ -41,7 +41,7 @@ bool save_function_json(
     for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
         values[funcIter].reserve(((int)mesh.get_num_vertices()));
     }
-    mesh.seq_foreach_vertex([&](VertexId vid, std::span<const Scalar, 3> data) {
+    mesh.seq_foreach_vertex([&](VertexId vid, std::span<const AdaptiveGrid::Scalar, 3> data) {
         llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20> func_gradList(funcNum);
         func_gradList = vertex_func_grad_map[value_of(vid)];
         for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
@@ -69,7 +69,7 @@ bool save_function_json(
 bool save_metrics(
     const std::string& filename,
     const std::array<std::string, 6>& tet_metric_labels,
-    const tet_metric metric_list)
+    const AdaptiveGrid::tet_metric metric_list)
 {
     using json = nlohmann::json;
     std::ofstream fout(filename.c_str(), std::ios::app);
@@ -132,14 +132,14 @@ int main(int argc, const char* argv[])
     llvm_vecsmall::SmallVector<csg_unit, 20> csg_tree = {};
 
     if (args.method == "IA") {
-        mode = IA;
+        mode = AdaptiveGrid::IA;
     }
     if (args.method == "CSG") {
-        mode = CSG;
+        mode = AdaptiveGrid::CSG;
         load_csgTree(args.csg_file, csg_tree);
     }
     if (args.method == "MI") {
-        mode = MI;
+        mode = AdaptiveGrid::MI;
     }
 
     /// Read implicit function
@@ -153,7 +153,7 @@ int main(int argc, const char* argv[])
     ///  @param[in] funcNum         The number of functions
     ///
     ///  @return        A vector of `Eigen::RowVector4d`.The vector size is the function number. Each eigen vector represents the value at 0th index and gradients at {1, 2, 3} index.
-    auto implicit_func = [&](std::span<const Scalar, 3> data, size_t funcNum) {
+    auto implicit_func = [&](std::span<const AdaptiveGrid::Scalar, 3> data, size_t funcNum) {
         llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20> vertex_eval(funcNum);
         for (size_t funcIter = 0; funcIter < funcNum; funcIter++) {
             auto& func = functions[funcIter];
@@ -182,7 +182,7 @@ int main(int argc, const char* argv[])
     };
 
     // perform main grid refinement algorithm:
-    tet_metric metric_list;
+    AdaptiveGrid::tet_metric metric_list;
     // an array of 10 timings: {total time getting the multiple indices, total time,time spent on
     // single function, time spent on double functions, time spent on triple functions time spent on
     // double functions' zero crossing test, time spent on three functions' zero crossing test,

@@ -17,6 +17,8 @@
 #include "tet_quality.h"
 
 
+namespace AdaptiveGrid {
+
 using Scalar = mtet::Scalar;
 
 using IndexMap =
@@ -74,3 +76,5 @@ bool gridRefine(
     mtet::MTetMesh& grid,
     tet_metric& metric_list,
     std::array<double, timer_amount> profileTimer);
+
+} // namespace AdaptiveGrid
