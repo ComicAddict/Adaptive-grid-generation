@@ -5,7 +5,6 @@
 #include "tet_quality.h"
 #include "timer.h"
 #include "csg.h"
-#include "grid_mesh.h"
 #include "grid_refine.h"
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -77,7 +76,7 @@ TEST_CASE("grid generation of CSG on known examples", "[CSG][examples]") {
     SECTION("20 tori") {
         //parse configurations
         threshold = 0.03;
-        grid = grid_mesh::load_tet_mesh(std::string(TEST_FILE) + "/Figure21/grid_1.json");
+        grid = load_tet_mesh(std::string(TEST_FILE) + "/Figure21/grid_1.json");
         mtet::save_mesh("init.msh", grid);
         grid = mtet::load_mesh("init.msh");
         std::string function_file = std::string(TEST_FILE) + "/Figure21/csg_examples_3.json";

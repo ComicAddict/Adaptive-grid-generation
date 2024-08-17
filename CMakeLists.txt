@@ -16,11 +16,12 @@ include(unordered_dense)
 file(GLOB SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 add_library(adaptive_mesh_refinement STATIC ${SRC_FILES})
 target_include_directories(adaptive_mesh_refinement PUBLIC
-     ${CMAKE_CURRENT_LIST_DIR}/src)
+    ${CMAKE_CURRENT_LIST_DIR}/include
+    ${CMAKE_CURRENT_LIST_DIR}/src)
 target_link_libraries(adaptive_mesh_refinement
-    PUBLIC 
+    PUBLIC
     Eigen3::Eigen
-    mtet::mtet 
+    mtet::mtet
     convex_hull_membership
     implicit_functions::implicit_functions
     nlohmann_json::nlohmann_json
@@ -34,7 +35,7 @@ target_include_directories(gridgen PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
 target_link_libraries(gridgen PRIVATE
     adaptive_mesh_refinement
     CLI11::CLI11
-    mtet::mtet 
+    mtet::mtet
     convex_hull_membership
     unordered_dense::unordered_dense
     smallvector::smallvector
@@ -50,7 +51,7 @@ if (GRID_GEN_TESTS)
  file(GLOB TEST_FILES "${CMAKE_CURRENT_LIST_DIR}/tests/*.cpp")
  add_executable(grid_gen_tests ${TEST_FILES})
  target_link_libraries(grid_gen_tests
-    PRIVATE 
+    PRIVATE
     adaptive_mesh_refinement
     Catch2::Catch2
     mtet::mtet
@@ -60,7 +61,7 @@ if (GRID_GEN_TESTS)
  target_compile_definitions(grid_gen_tests PRIVATE CATCH_CONFIG_ENABLE_BENCHMARKING)
 target_compile_definitions(
     grid_gen_tests
-    PRIVATE                   
+    PRIVATE
     -DTEST_FILE="${CMAKE_CURRENT_LIST_DIR}/data"
 )
  catch_discover_tests(grid_gen_tests)

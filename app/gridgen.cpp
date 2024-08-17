@@ -2,8 +2,9 @@
 #include <limits>
 #include <span>
 
+#include <AdaptiveGrid/grid.h>
+
 #include "csg.h"
-#include "grid_mesh.h"
 #include "grid_refine.h"
 #include "io.h"
 #include "timer.h"
@@ -44,7 +45,7 @@ int main(int argc, const char* argv[])
     // Read initial grid
     mtet::MTetMesh grid;
     if (args.grid_file.find(".json") != std::string::npos) {
-        grid = grid_mesh::load_tet_mesh(args.grid_file);
+        grid = load_tet_mesh(args.grid_file);
     } else {
         grid = mtet::load_mesh(args.grid_file);
     }

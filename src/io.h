@@ -7,12 +7,18 @@
 
 #pragma once
 
+#include <AdaptiveGrid/grid.h>
+
 #include <ankerl/unordered_dense.h>
 #include <Eigen/Core>
 #include "adaptive_grid_gen.h"
 #include "timer.h"
+#include <nlohmann/json.hpp>
 
 using namespace mtet;
+
+// load tet mesh from json file
+mtet::MTetMesh load_tet_mesh(const std::string &filename);
 
 using IndexMap = ankerl::unordered_dense::map<uint64_t, llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20>>;
 
