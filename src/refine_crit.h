@@ -13,13 +13,6 @@
 #include <Eigen/Geometry>
 #include <Eigen/LU>
 
-/// Enums for the current settings of implicit complexes
-enum geo_obj {
-    IA, /*0*/
-    CSG, /*1*/
-    MI /*2*/
-};
-
 /// Three types of refinement criteria based on the modality.
 
 /// This function performs two checks (zero-crossing and distance checks) under the setting of implicit arrangement(IA) and its curve network.
