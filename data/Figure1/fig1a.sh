@@ -1,5 +1,12 @@
-cd ../../build/Release
+DIRECTORY="../../build"
+FILENAME="gridgen"
 
-chmod +x gridgen
+# Use the find command to search for the file
+GRIDGEN=$(find "$DIRECTORY" -type f -name "$FILENAME" -print -quit)
 
-./gridgen ../../data/grid/cube6.msh ../../data/Figure1/10-wikiBall.json -t 0.0005
+# Check if the file was found
+if [ -z "$GRIDGEN" ]; then
+  echo "File not found"
+else
+  "$GRIDGEN" ../../data/grid/cube6.msh ../../data/Figure1/10-wikiBall.json -t 0.0005 --discretize 1
+fi

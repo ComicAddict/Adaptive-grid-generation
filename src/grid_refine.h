@@ -42,6 +42,22 @@ struct TetEqual
     }
 };
 
+
+using IndexMap =
+    ankerl::unordered_dense::map<uint64_t, llvm_vecsmall::SmallVector<Eigen::RowVector4d, 20>>;
+
+struct tet_metric
+{
+    size_t total_tet = 0;
+    int active_tet = 0;
+    double min_radius_ratio = 1;
+    double active_radius_ratio = 1;
+    int two_func_check = 0;
+    int three_func_check = 0;
+    IndexMap vertex_func_grad_map;
+    std::vector<mtet::TetId> activeTetId;
+};
+
 /// The main function for adaptively refine an initial grid based on a set of input implicit functions. The result forms an adaptive background grid for the given implicit complexes (check paper for details: https://dl.acm.org/doi/10.1145/3658215)
 ///
 /// @param[in] mode         The modality of the implicit complex, including Implicit Arrangement(IA), Contructive Solid Geometry(CSG), Material Interface(MI).
