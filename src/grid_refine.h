@@ -38,7 +38,7 @@ struct tet_metric
 
 
 /// Enums for the current settings of implicit complexes
-enum geo_obj {
+enum Mode {
     IA, /*0*/
     CSG, /*1*/
     MI /*2*/
@@ -62,7 +62,7 @@ enum geo_obj {
 ///
 ///@return          Whether this function successfully proceeds.
 bool gridRefine(
-    const int mode,
+    const Mode mode,
     const bool curve_network,
     const double threshold,
     const double alpha,
@@ -75,6 +75,6 @@ bool gridRefine(
         llvm_vecsmall::SmallVector<std::array<double, 2>, 20>)> csg_func,
     mtet::MTetMesh& grid,
     tet_metric& metric_list,
-    std::array<double, timer_amount> profileTimer);
+    std::array<double, timer_amount>& profileTimer);
 
 } // namespace AdaptiveGrid

@@ -128,7 +128,7 @@ int main(int argc, const char* argv[])
 
     std::string function_file = args.function_file;
     double threshold = args.threshold;
-    int mode;
+    AdaptiveGrid::Mode mode;
     llvm_vecsmall::SmallVector<csg_unit, 20> csg_tree = {};
 
     if (args.method == "IA") {

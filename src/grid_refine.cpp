@@ -38,7 +38,7 @@ struct TetEqual
 
 
 bool AdaptiveGrid::gridRefine(
-    const int mode,
+    const Mode mode,
     const bool curve_network,
     const double threshold,
     const double alpha,
@@ -51,7 +51,7 @@ bool AdaptiveGrid::gridRefine(
         llvm_vecsmall::SmallVector<std::array<double, 2>, 20>)> csg_func,
     mtet::MTetMesh& grid,
     tet_metric& metric_list,
-    std::array<double, timer_amount> profileTimer)
+    std::array<double, timer_amount>& profileTimer)
 {
     /// Tet Metric
     int sub_call_two = 0;
