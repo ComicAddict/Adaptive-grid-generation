@@ -63,7 +63,7 @@ bool save_function_json(const std::string& filename,
         llvm_vecsmall::SmallVector<std::array<double, 4>, 20> func_gradList(funcNum);
         func_gradList = vertex_func_grad_map[value_of(vid)];
         for (size_t funcIter = 0; funcIter < funcNum; funcIter++){
-            cout << data[0] << " " << data[1] << " " << data[2] << ": " << func_gradList[funcIter][0] << ", " << func_gradList[funcIter][1] << ", " << func_gradList[funcIter][2] << ", " << func_gradList[funcIter][3] << endl;
+            // << data[0] << " " << data[1] << " " << data[2] << ": " << func_gradList[funcIter][0] << ", " << func_gradList[funcIter][1] << ", " << func_gradList[funcIter][2] << ", " << func_gradList[funcIter][3] << endl;
             values[funcIter].push_back(func_gradList[funcIter][0]);
         }
     });
